@@ -1,28 +1,30 @@
 import pygame
 import luait
 
-pygame.init()
-screen = pygame.display.set_mode((1280, 720))
-clock = pygame.time.Clock()
+class Game:
+    def __init__(self):
+        self.screen = pygame.display.set_mode((1280, 720))
+        self.clock = pygame.time.Clock()
 
-script_engine = luait.GameScriptingEngine()
-display_script_engine = luait.GameScriptingDisplayEngine()
+        self.script_engine = luait.GameScriptingEngine()
+        self.display_script_engine = luait.GameScriptingDisplayEngine()
 
-display_script_engine.add_binding_function("fill", screen.fill)
+    def run(self):
+        pygame.init()
 
-running = True
+        running = True
 
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
 
-    screen.fill("#7d94b5")
+            self.screen.fill("#7d94b5")
 
-    display_script_engine.update()
+            self.display_script_engine.update()
 
-    pygame.display.flip()
+            pygame.display.flip()
 
-    clock.tick(60)
+            self.clock.tick(60)
 
-pygame.quit()
+        pygame.quit()
