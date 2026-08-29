@@ -1,9 +1,24 @@
 from lupa.lua55 import LuaRuntime
 from pathlib import Path
+import json
 
 class GameScriptingEngine:
     def __init__(self):
         self.lua = LuaRuntime()
+
+        self.modules_order_file: Path = None
+        self.modules_dir: Path = None
+
+    def init(self):
+        self.modules_dir = Path("modules")
+        self.modules_dir.mkdir(exist_ok=True)
+
+        self.modules_order_file = Path("modules/order.json")
+        self.modules_order_file.touch(exist_ok=True)
+
+        if self.modules_order_file.read_text().strip() == "":
+            default_json = {"order": []}
+            self.modules_order_file.write_text(json.dumps(default_json, indent=2))
 
     def execute(self, code:str):
         self.lua.execute(code)
