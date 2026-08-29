@@ -5,11 +5,10 @@ pygame.init()
 screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 
-script_engine = luait.GameScriptingEngine(luait.lua)
+script_engine = luait.GameScriptingEngine()
 display_script_engine = luait.GameScriptingDisplayEngine()
 
 display_script_engine.add_binding_function("fill", screen.fill)
-display_script_engine.add_function("fill", ["#7d94b5"])
 
 running = True
 
@@ -18,7 +17,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    #screen.fill("#7d94b5")
+    screen.fill("#7d94b5")
 
     display_script_engine.update()
 

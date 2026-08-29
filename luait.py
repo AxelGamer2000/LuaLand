@@ -1,14 +1,15 @@
 from lupa.lua55 import LuaRuntime
-import pygame
-
-lua = LuaRuntime()
+from pathlib import Path
 
 class GameScriptingEngine:
-    def __init__(self, lua:LuaRuntime):
-        self.lua = lua
+    def __init__(self):
+        self.lua = LuaRuntime()
 
     def execute(self, code:str):
         self.lua.execute(code)
+
+    def execute_file(self, path:Path):
+        self.lua.execute(path.read_text(encoding="utf-8"))
 
     def register(self, name:str, function):
         setattr(self.lua.globals(), name, function)
