@@ -1,0 +1,15 @@
+-- Name: ...
+-- Author: ...
+-- Description: ...
+
+function start()
+    -- execute once
+end
+
+function render()
+    -- update but for graphics
+end
+
+function update()
+    -- execute every time
+end
