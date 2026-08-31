@@ -21,9 +21,13 @@ while running:
             running = False
 
     if start_event:
+        api.start_event()
+        api.render_event()
         start_event = False
 
     screen.fill("#7d94b5")
+
+    api.update_event()
 
     display_script_engine.update()
 

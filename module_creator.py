@@ -45,6 +45,7 @@ while True:
                 break
     elif command == "sync":
         counter = 0
+        temp_order = []
 
         if len(modules) == 0:
             order_json["order"] = []
@@ -55,6 +56,13 @@ while True:
                 if not str(module) in order:
                     order.append(str(module))
                     counter += 1
+
+            if len(modules) != len(order):
+                for content in order:
+                    if Path(content) in modules:
+                        temp_order.append(content)
+
+                order = temp_order
 
             order_json["order"] = order
             order_file.write_text(json.dumps(order_json, indent=2))
