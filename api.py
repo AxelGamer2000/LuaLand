@@ -3,6 +3,30 @@ import json
 import luait
 import pygame
 
+class ModdingApi:
+    def __init__(self, is_table:bool, name:str = "", display_script_engine:luait.GameScriptingDisplayEngine = None):
+        self.is_table = is_table
+        self.name = name
+        self.display_script_engine = display_script_engine
+
+    def get_api_functions(self):
+        functions = [
+            getattr(self, name) for name in dir(self) if callable(getattr(self, name)) and not name.startswith("_")
+        ]
+        function_names: list[str] = [func.__name__ for func in functions]
+        functions_api_names: list[str] = [func for func in function_names if func.startswith("api_")]
+
+        return functions_api_names
+
+    def get_display_api_functions(self):
+        functions = [
+            getattr(self, name) for name in dir(self) if callable(getattr(self, name)) and not name.startswith("_")
+        ]
+        function_names: list[str] = [func.__name__ for func in functions]
+        functions_api_names: list[str] = [func for func in function_names if func.startswith("display_api_")]
+
+        return functions_api_names
+
 class Api:
     def __init__(self, script_engine:luait.GameScriptingEngine, display_script_engine:luait.GameScriptingDisplayEngine, screen:pygame.surface.Surface):
         self.script_engine = script_engine
@@ -49,3 +73,7 @@ class Api:
             if render is not None:
                 render()
 
+    def expose_api(self, modding_api:ModdingApi):
+        if modding_api.is_table:
+            for function_name in modding_api.get_api_functions():
+                self.script_engine.register(function_name, getattr(modding_api, function_name))

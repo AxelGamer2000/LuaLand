@@ -29,6 +29,9 @@ class GameScriptingEngine:
     def register(self, name:str, function):
         setattr(self.lua.globals(), name, function)
 
+    def register_table(self, name:str, function):
+        setattr(self.lua.globals(), name, function)
+
 class DisplayFunction:
     def __init__(self, name:str, args:list):
         self.name:str = name
