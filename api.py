@@ -76,4 +76,4 @@ class Api:
     def expose_api(self, modding_api:ModdingApi):
         if modding_api.is_table:
             for function_name in modding_api.get_api_functions():
-                self.script_engine.register(function_name, getattr(modding_api, function_name))
+                self.script_engine.lua.globals()

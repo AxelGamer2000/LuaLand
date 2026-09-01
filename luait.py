@@ -1,6 +1,7 @@
 from lupa.lua55 import LuaRuntime
 from pathlib import Path
 import json
+import api
 
 class GameScriptingEngine:
     def __init__(self):
@@ -26,11 +27,8 @@ class GameScriptingEngine:
     def execute_file(self, path:Path):
         self.lua.execute(path.read_text(encoding="utf-8"))
 
-    def register(self, name:str, function):
-        setattr(self.lua.globals(), name, function)
-
-    def register_table(self, name:str, function):
-        setattr(self.lua.globals(), name, function)
+    def expose_api(self, modding_api:api.ModdingApi):
+        pass
 
 class DisplayFunction:
     def __init__(self, name:str, args:list):
