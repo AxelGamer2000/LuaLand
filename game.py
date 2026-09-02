@@ -1,6 +1,16 @@
 import pygame
 import luait
 from api import Api
+from loguru import logger
+import sys
+
+logger.remove()
+
+logger.add(
+    sys.stdout,
+    format="<level>[{time:HH:mm:ss}] [{extra[thread]}/{level}] [{extra[source]}]: {message}</level>",
+    colorize=True
+)
 
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))

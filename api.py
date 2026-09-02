@@ -44,19 +44,23 @@ class Api:
 
     def init(self):
         self.script_engine.init()
+        self.register_api()
+
+        self.script_engine.lua.globals().print = None
+        self.script_engine.lua.globals().require = None
+        self.script_engine.lua.globals().dofile = None
+        self.script_engine.lua.globals().loadfile = None
 
         for module in self.order_path:
-            print(f"{module.name} loaded")
+            self.script_engine.logger.log(f"{module.name} loaded")
             self.script_engine.execute_file(module)
 
             self.start_module.append(self.script_engine.lua.globals().start)
             self.update_module.append(self.script_engine.lua.globals().update)
             self.render_module.append(self.script_engine.lua.globals().render)
 
-        self.register_functions()
-
-    def register_functions(self):
-        pass
+    def register_api(self):
+        self.script_engine.expose_api(BaseApi())
 
     def start_event(self):
         for start in self.start_module:
@@ -73,7 +77,12 @@ class Api:
             if render is not None:
                 render()
 
-    def expose_api(self, modding_api:ModdingApi):
-        if modding_api.is_table:
-            for function_name in modding_api.get_api_functions():
-                self.script_engine.lua.globals()
+# Modding Api
+
+class BaseApi(ModdingApi):
+    def __init__(self):
+        super().__init__(False)
+
+class ConsoleApi(ModdingApi):
+    def __init__(self):
+        super().__init__(True, "console")

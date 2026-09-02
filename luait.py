@@ -1,11 +1,13 @@
 from lupa.lua55 import LuaRuntime
 from pathlib import Path
+from loguru import logger
 import json
 import api
 
 class GameScriptingEngine:
     def __init__(self):
         self.lua = LuaRuntime()
+        self.logger = logger.bind(thread="lua", source="GameScriptingEngine")
 
         self.modules_order_file: Path = None
         self.modules_dir: Path = None
@@ -28,7 +30,15 @@ class GameScriptingEngine:
         self.lua.execute(path.read_text(encoding="utf-8"))
 
     def expose_api(self, modding_api:api.ModdingApi):
-        pass
+        if modding_api.is_table:
+            table = self.lua.table()
+            for function_name in modding_api.get_api_functions():
+                table[function_name.replace("api_", "")] = getattr(modding_api, function_name)
+
+            setattr(self.lua.globals(), modding_api.name, table)
+        else:
+            for function_name in modding_api.get_api_functions():
+                setattr(self.lua.globals(), function_name.replace("api_", ""), getattr(modding_api, function_name))
 
 class DisplayFunction:
     def __init__(self, name:str, args:list):
