@@ -26,8 +26,8 @@ class GameScriptingEngine:
     def execute(self, code:str):
         self.lua.execute(code)
 
-    def execute_file(self, path:Path):
-        self.lua.execute(path.read_text(encoding="utf-8"))
+    def execute_file(self, path:Path, name):
+        self.lua.execute(f"_name = '{name}'\n{path.read_text(encoding="utf-8")}")
 
     def expose_api(self, modding_api:api.ModdingApi):
         if modding_api.is_table:

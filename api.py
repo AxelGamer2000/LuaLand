@@ -2,6 +2,7 @@ from pathlib import Path
 import json
 import luait
 import pygame
+from loguru import logger
 
 class ModdingApi:
     def __init__(self, is_table:bool, name:str = "", display_script_engine:luait.GameScriptingDisplayEngine = None):
@@ -46,14 +47,17 @@ class Api:
         self.script_engine.init()
         self.register_api()
 
-        self.script_engine.lua.globals().print = None
+        #self.script_engine.lua.globals().print = None
         self.script_engine.lua.globals().require = None
         self.script_engine.lua.globals().dofile = None
         self.script_engine.lua.globals().loadfile = None
 
         for module in self.order_path:
-            self.script_engine.logger.log(f"{module.name} loaded")
-            self.script_engine.execute_file(module)
+            env = self.script_engine.lua.table()
+            env._name = module.name
+
+            self.script_engine.logger.info(f"{module.name} loaded")
+            self.script_engine.execute_file(module, module.name)
 
             self.start_module.append(self.script_engine.lua.globals().start)
             self.update_module.append(self.script_engine.lua.globals().update)
@@ -61,6 +65,7 @@ class Api:
 
     def register_api(self):
         self.script_engine.expose_api(BaseApi())
+        self.script_engine.expose_api(ConsoleApi(self.script_engine))
 
     def start_event(self):
         for start in self.start_module:
@@ -84,5 +89,10 @@ class BaseApi(ModdingApi):
         super().__init__(False)
 
 class ConsoleApi(ModdingApi):
-    def __init__(self):
+    def __init__(self, script_engine:luait.GameScriptingEngine):
         super().__init__(True, "console")
+        self.script_engine = script_engine
+
+    def api_log(self, message):
+        logger_log = logger.bind(thread="lua", source=self.script_engine.lua.globals()._name)
+        logger_log.info(message)
