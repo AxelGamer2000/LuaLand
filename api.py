@@ -65,7 +65,7 @@ class Api:
 
     def register_api(self):
         self.script_engine.expose_api(BaseApi())
-        self.script_engine.expose_api(ConsoleApi(self.script_engine))
+        #self.script_engine.expose_api(ConsoleApi(self.script_engine))
 
     def start_event(self):
         for start in self.start_module:
@@ -88,11 +88,13 @@ class BaseApi(ModdingApi):
     def __init__(self):
         super().__init__(False)
 
+"""
 class ConsoleApi(ModdingApi):
     def __init__(self, script_engine:luait.GameScriptingEngine):
         super().__init__(True, "console")
         self.script_engine = script_engine
 
     def api_log(self, message):
-        logger_log = logger.bind(thread="lua", source=self.script_engine.lua.globals()._name)
+        logger_log = logger.bind(thread="lua", source="")
         logger_log.info(message)
+"""
