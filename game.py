@@ -17,8 +17,8 @@ screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 
 script_engine = luait.GameScriptingEngine()
-display_script_engine = luait.GameScriptingDisplayEngine()
-api = Api(script_engine, display_script_engine, screen)
+game_data = luait.GameData()
+api = Api(script_engine, game_data, screen)
 
 running = True
 start_event = True
@@ -32,14 +32,11 @@ while running:
 
     if start_event:
         api.start_event()
-        api.render_event()
         start_event = False
 
-    screen.fill("#7d94b5")
+    screen.fill(game_data.background_color)
 
     api.update_event()
-
-    display_script_engine.update()
 
     pygame.display.flip()
 

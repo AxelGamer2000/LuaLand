@@ -26,7 +26,6 @@ class Module:
         self.lua.execute(self.path.read_text(encoding="utf-8"))
 
         self.start_function = self.lua.globals().start
-        self.render_function = self.lua.globals().render
         self.update_function = self.lua.globals().update
 
     def remove_functions(self, functions_list:list):
@@ -36,10 +35,6 @@ class Module:
     def start(self):
         if self.start_function is not None:
             self.start_function()
-
-    def render(self):
-        if self.render_function is not None:
-            self.render_function()
 
     def update(self):
         if self.update_function is not None:
@@ -75,22 +70,6 @@ class GameScriptingEngine:
             for function_name in modding_api.get_api_functions():
                 setattr(lua.globals(), function_name.replace("api_", ""), getattr(modding_api, function_name))
 
-class DisplayFunction:
-    def __init__(self, name:str, args:list):
-        self.name:str = name
-        self.args:list = args
-
-class GameScriptingDisplayEngine:
+class GameData:
     def __init__(self):
-        self.binding_display_functions_table:dict = {}
-        self.display_functions:list[DisplayFunction] = []
-
-    def add_binding_function(self, function_name:str, function):
-        self.binding_display_functions_table[function_name] = function
-
-    def add_function(self, function_name:str, args:list):
-        self.display_functions.append(DisplayFunction(function_name, args))
-
-    def update(self):
-        for display_function in self.display_functions:
-            self.binding_display_functions_table[display_function.name](*display_function.args)
+        self.background_color = "#7d94b5"
