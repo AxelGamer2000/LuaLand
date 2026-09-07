@@ -32,6 +32,7 @@ while running:
 
     if start_event:
         api.start_event()
+        pygame.display.set_caption(game_data.title)
         start_event = False
 
     screen.fill(game_data.background_color)

@@ -46,7 +46,7 @@ class Api:
             module.execute()
 
     def register_api(self, lua:LuaRuntime, module_name:str):
-        self.script_engine.expose_api(BaseApi(), lua)
+        self.script_engine.expose_api(BaseApi(self.game_data), lua)
         self.script_engine.expose_api(ConsoleApi(module_name), lua)
         self.script_engine.expose_api(ScreenApi(self.screen, self.game_data), lua)
 
@@ -61,8 +61,15 @@ class Api:
 # Modding Api
 
 class BaseApi(ModdingApi):
-    def __init__(self):
+    def __init__(self, game_data:luait.GameData):
+        self.game_data = game_data
         super().__init__(False)
+
+    def api_get_title(self):
+        return self.game_data.title
+
+    def api_set_title(self, new_title):
+        self.game_data.title = new_title
 
 
 class ConsoleApi(ModdingApi):

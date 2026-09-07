@@ -73,3 +73,4 @@ class GameScriptingEngine:
 class GameData:
     def __init__(self):
         self.background_color = "#7d94b5"
+        self.title = "Lua Land"
