@@ -101,3 +101,7 @@ class ScreenApi(ModdingApi):
 
     def api_rectangle(self, x, y, color, width, height):
         pygame.draw.rect(self.screen, color, [x, y, width, height])
+
+    def api_line(self):
+        ...
+        #pygame.draw.line()
